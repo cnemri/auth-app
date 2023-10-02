@@ -16,7 +16,7 @@ export default function SignupPage() {
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const onSignup = async () => {
+  const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
       setLoading(true);
       const response = await axios.post("/api/users/signup", user);
@@ -39,45 +39,65 @@ export default function SignupPage() {
   }, [user]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>{loading ? "Processing..." : "Signup"}</h1>
-      <label htmlFor="username">Username</label>
-      <input
-        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300"
-        id="username"
-        type="text"
-        value={user.username}
-        onChange={(e) => setUser({ ...user, username: e.target.value })}
-        placeholder="John Doe"
-      />
-      <label htmlFor="email">Email</label>
-      <input
-        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300"
-        id="email"
-        type="email"
-        value={user.email}
-        onChange={(e) => setUser({ ...user, email: e.target.value })}
-        placeholder="jdoe@example.com"
-      />
-      <label htmlFor="password">Password</label>
-      <input
-        className="p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300"
-        id="password"
-        type="password"
-        value={user.password}
-        onChange={(e) => setUser({ ...user, password: e.target.value })}
-        placeholder="Password"
-      />
-      <button
-        className={`p-2 mt-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-gray-300 hover:bg-gray-200 ${
-          buttonDisabled && "opacity-50 cursor-not-allowed"
-        }}`}
-        onClick={onSignup}
-        disabled={buttonDisabled}
-      >
-        {buttonDisabled ? "No signup" : "Signup"}
-      </button>
-      <Link href="/login">Already a member? Login here</Link>
-    </div>
+    <form
+      onSubmit={onSignup}
+      className="flex items-center justify-center min-h-screen bg-gray-100"
+    >
+      <div className="bg-white p-6 rounded-lg shadow-md w-full sm:w-96">
+        <h1 className="text-2xl font-semibold mb-6">
+          {loading ? "Processing..." : "Signup"}
+        </h1>
+        <label htmlFor="username" className="block text-gray-600">
+          Username
+        </label>
+        <input
+          className="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          id="username"
+          type="text"
+          value={user.username}
+          onChange={(e) => setUser({ ...user, username: e.target.value })}
+          placeholder="John Doe"
+          required
+        />
+        <label htmlFor="email" className="block text-gray-600 mt-4">
+          Email
+        </label>
+        <input
+          className="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          id="email"
+          type="email"
+          value={user.email}
+          onChange={(e) => setUser({ ...user, email: e.target.value })}
+          placeholder="jdoe@example.com"
+          required
+        />
+        <label htmlFor="password" className="block text-gray-600 mt-4">
+          Password
+        </label>
+        <input
+          className="w-full px-4 py-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          id="password"
+          type="password"
+          value={user.password}
+          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          placeholder="Password"
+          required
+        />
+        <button
+          className={`w-full bg-blue-500 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-full ${
+            buttonDisabled && "opacity-50 cursor-not-allowed"
+          } mt-4`}
+          disabled={buttonDisabled}
+        >
+          {buttonDisabled ? "No Signup" : "Signup"}
+        </button>
+        <Link
+          href="/login"
+          className="text-blue-500 hover:underline mt-4 block text-center"
+        >
+          Already a member? Login here
+        </Link>
+      </div>
+    </form>
   );
 }
