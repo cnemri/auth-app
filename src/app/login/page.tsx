@@ -1,17 +1,18 @@
 "use client";
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios, { Axios } from "axios";
 import toast from "react-hot-toast";
 
 export default function Login() {
-  const [user, setUser] = React.useState({
+  const [user, setUser] = useState({
     email: "",
     password: "",
   });
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const router = useRouter();
 
@@ -33,6 +34,7 @@ export default function Login() {
     } catch (error: any) {
       console.log(error);
       toast.error(error.message);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -80,6 +82,11 @@ export default function Login() {
           >
             {buttonDisabled ? "No Login" : "Login"}
           </button>
+          {error && (
+            <div className="text-red-500  mt-2 bg-red-50 py-1 rounded-3xl text-center">
+              Invalid email or password
+            </div>
+          )}
           <Link
             href="/signup"
             className="text-blue-500 hover:underline mt-4 block text-center"

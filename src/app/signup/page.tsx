@@ -15,6 +15,7 @@ export default function SignupPage() {
 
   const [buttonDisabled, setButtonDisabled] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const onSignup = async (e: React.FormEvent<HTMLFormElement>) => {
     try {
@@ -26,6 +27,7 @@ export default function SignupPage() {
     } catch (error: any) {
       console.log("Signup failed");
       toast.error(error.message);
+      setError(true);
     } finally {
       setLoading(false);
     }
@@ -92,6 +94,11 @@ export default function SignupPage() {
         >
           {buttonDisabled ? "No Signup" : "Signup"}
         </button>
+        {error && (
+          <div className="text-red-500  mt-2 bg-red-50 py-1 rounded-3xl text-center">
+            User already exists
+          </div>
+        )}
         <Link
           href="/login"
           className="text-blue-500 hover:underline mt-4 block text-center"
