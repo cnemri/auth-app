@@ -20,8 +20,8 @@ export const sendEmail = async ({
       });
     } else if (emailType === "RESET") {
       await User.findByIdAndUpdate(userId, {
-        resetToken: hashedToken,
-        resetTokenExpiry: Date.now() + 3600000,
+        forgotPasswordToken: hashedToken,
+        forgotPasswordTokenExpiry: Date.now() + 3600000,
       });
     }
 
@@ -39,13 +39,15 @@ export const sendEmail = async ({
       to: email,
       subject:
         emailType === "VERIFY" ? "Verify your account" : "Reset your password",
-      html: `<p>Click <a href="${
-        process.env.DOMAIN
-      }/verifyemail?token=${hashedToken}">here</a> to ${
+      html: `<p>Click <a href="${process.env.DOMAIN}/${
+        emailType === "VERIFY" ? "verifyemail" : "newpwd"
+      }?token=${hashedToken}">here</a> to ${
         emailType === "VERIFY" ? "verify your email" : "reset your password"
       } or copy and paste the link below in your browser <br/>${
         process.env.DOMAIN
-      }/verifyemail?token=${hashedToken}</p>`,
+      }/${
+        emailType === "VERIFY" ? "verifyemail" : "newpwd"
+      }?token=${hashedToken}"</p>`,
     };
 
     const mailResponse = await transport.sendMail(mailOptions);
