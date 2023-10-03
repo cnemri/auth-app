@@ -31,6 +31,14 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Check if user is verified
+    if (!user.isVerified) {
+      return NextResponse.json(
+        { error: "Please verify your email" },
+        { status: 400 }
+      );
+    }
+
     // create token data
     const tokenData = {
       id: user._id,
